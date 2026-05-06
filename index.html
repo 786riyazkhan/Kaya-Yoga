@@ -30,6 +30,76 @@
   --ease:         cubic-bezier(.25,1,.5,1);
 }
 
+/* ══════════════════════════════════════
+   LIQUID GLASS SYSTEM (from test.html reference)
+══════════════════════════════════════ */
+
+/* Light tier — subtle glass, like the Account button */
+.liquid-glass {
+  background: rgba(255,255,255,0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+  position: relative;
+  overflow: hidden;
+}
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1.4px;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.45) 0%,
+    rgba(255,255,255,0.15) 20%,
+    transparent 40%,
+    transparent 60%,
+    rgba(255,255,255,0.15) 80%,
+    rgba(255,255,255,0.45) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Strong tier — thick frosted glass, like hero/right-body panels */
+.liquid-glass-strong {
+  background: rgba(255,255,255,0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  box-shadow: 4px 4px 4px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,0.15);
+  position: relative;
+  overflow: hidden;
+}
+.liquid-glass-strong::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1.4px;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.5) 0%,
+    rgba(255,255,255,0.2) 20%,
+    transparent 40%,
+    transparent 60%,
+    rgba(255,255,255,0.2) 80%,
+    rgba(255,255,255,0.5) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* ═══ RESET ═══ */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -75,32 +145,116 @@ body.loading{overflow:hidden;}
 /* ═══ HEADER ═══ */
 .hdr{position:fixed;inset:0 0 auto 0;z-index:1000;padding:16px 0;transition:padding .4s;}
 .hdr.s{padding:0;}
-.nav-wrap{max-width:1340px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:var(--nav-h);transition:height .4s,background .4s,border-radius .4s,box-shadow .4s,margin .4s;}
-.hdr.s .nav-wrap{background:rgba(255,247,238,.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(106,118,80,.15);border-radius:50px;height:var(--nav-h-s);margin-top:10px;box-shadow:var(--shadow-md);}
+.nav-wrap{
+  max-width:1340px;margin:0 auto;padding:0 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:var(--nav-h);
+  transition:height .4s,border-radius .4s,box-shadow .4s,margin .4s,backdrop-filter .4s,background .4s;
+}
+
+/* Scrolled state — full liquid glass pill */
+.hdr.s .nav-wrap{
+  /* Liquid glass strong — matches the Account/menu-btn look from test.html */
+  background: rgba(255,247,238,0.08);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(50px) saturate(180%);
+  -webkit-backdrop-filter: blur(50px) saturate(180%);
+  box-shadow: 4px 4px 20px rgba(0,0,0,0.08), inset 0 1px 1px rgba(255,255,255,0.5);
+  border-radius: 50px;
+  height: var(--nav-h-s);
+  margin-top: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* The top/bottom shimmer border drawn via pseudo-element */
+.hdr.s .nav-wrap::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  padding:1.4px;
+  border-radius:50px;
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,0.6) 0%,
+    rgba(255,255,255,0.2) 20%,
+    transparent 40%,
+    transparent 60%,
+    rgba(255,255,255,0.2) 80%,
+    rgba(255,255,255,0.6) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events:none;
+  z-index:0;
+}
+/* Push nav children above the pseudo-element */
+.hdr.s .nav-wrap > *{position:relative;z-index:1;}
 .nav-l,.nav-r{display:flex;align-items:center;gap:2px;flex:1;}
 .nav-r{justify-content:flex-end;}
 
 /* Logo */
 .logo-wrap{position:fixed;left:50%;top:calc(16px + var(--nav-h)/2);transform:translate(-50%,-50%);z-index:1002;transition:top .4s;}
 .logo-wrap.s{top:calc(10px + var(--nav-h-s)/2);}
-.logo-circle{width:72px;height:72px;border-radius:50%;background:rgba(106,118,80,.1);border:1px solid rgba(106,118,80,.22);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;transition:width .4s,height .4s,background .4s;overflow:hidden;}
-.logo-circle.s{width:46px;height:46px;background:rgba(106,118,80,.15);}
+/* Logo circle — liquid glass */
+.logo-circle{
+  width:72px;height:72px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  transition:width .4s,height .4s,background .4s,box-shadow .4s;
+  overflow:hidden;
+  position:relative;
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.25),0 4px 20px rgba(0,0,0,0.1);
+}
+/* Glass shimmer border on logo */
+.logo-circle::after{
+  content:'';position:absolute;inset:0;padding:1px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(255,255,255,0.55) 0%,rgba(255,255,255,0.1) 40%,transparent 60%,rgba(255,255,255,0.2) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.logo-circle.s{width:46px;height:46px;background:rgba(255,255,255,0.15);}
 .logo-txt{font-family:var(--ff-d);font-size:14px;letter-spacing:2px;color:var(--green-dark);font-weight:600;}
 .logo-img-el{width:100%;height:100%;object-fit:contain;border-radius:50%;}
 
 /* Nav links */
-.nl{color:var(--text-muted);font-size:10px;letter-spacing:1.8px;text-transform:uppercase;font-weight:400;padding:10px 12px;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:color .25s;position:relative;background:none;border:none;}
-.nl::after{content:"";position:absolute;left:12px;right:12px;bottom:4px;height:1px;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform .3s;}
+.nl{color:var(--text-muted);font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;font-weight:400;padding:10px 9px;display:flex;align-items:center;gap:4px;white-space:nowrap;transition:color .25s;position:relative;background:none;border:none;}
+.nl::after{content:"";position:absolute;left:9px;right:9px;bottom:4px;height:1px;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform .3s;}
 .nl:hover{color:var(--green-dark);}
 .nl:hover::after,.nl.active::after{transform:scaleX(1);}
 .nl .arr{width:7px;height:7px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg);transition:transform .25s;margin-top:-2px;flex-shrink:0;}
 .nav-item{position:relative;}
 .nav-item:hover .arr{transform:rotate(-135deg);}
 
-/* Dropdown */
-.dd{position:absolute;top:calc(100% + 8px);left:0;min-width:200px;background:rgba(255,247,238,.97);backdrop-filter:blur(24px);border:1px solid rgba(106,118,80,.16);border-radius:14px;padding:8px 0;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .28s,transform .28s;box-shadow:var(--shadow-md);z-index:200;}
+/* Dropdown — liquid glass */
+.dd{
+  position:absolute;top:calc(100% + 8px);left:0;min-width:200px;
+  border-radius:18px;padding:8px 0;
+  opacity:0;transform:translateY(10px);pointer-events:none;
+  transition:opacity .28s,transform .28s;
+  z-index:200;
+  /* liquid glass strong */
+  background:rgba(255,247,238,0.12);
+  backdrop-filter:blur(40px) saturate(180%);
+  -webkit-backdrop-filter:blur(40px) saturate(180%);
+  box-shadow:4px 4px 24px rgba(0,0,0,0.1),inset 0 1px 1px rgba(255,255,255,0.35);
+  position:absolute;
+  overflow:hidden;
+}
+.dd::before{
+  content:'';position:absolute;inset:0;padding:1.2px;border-radius:18px;
+  background:linear-gradient(160deg,rgba(255,255,255,0.5) 0%,rgba(255,255,255,0.15) 30%,transparent 55%,rgba(255,255,255,0.15) 80%,rgba(255,255,255,0.45) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
 .nav-item:hover>.dd{opacity:1;transform:translateY(0);pointer-events:auto;}
-.dd::before{content:"";position:absolute;top:-10px;left:0;right:0;height:10px;}
+.dd::after{content:"";position:absolute;top:-10px;left:0;right:0;height:10px;}
 .dd-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--green);padding:8px 16px 3px;display:block;font-weight:500;}
 .dd a{display:block;color:var(--text-muted);font-size:11.5px;letter-spacing:.4px;padding:7px 16px;transition:background .2s,color .2s,padding-left .2s;}
 .dd a:hover{background:rgba(106,118,80,.08);color:var(--green-dark);padding-left:22px;}
@@ -108,41 +262,145 @@ body.loading{overflow:hidden;}
 .dd.wide .dc:first-child{border-right:1px solid rgba(106,118,80,.08);}
 
 /* Book btn */
-.btn-book{background:var(--green);color:white;font-size:9.5px;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:10px 20px;border-radius:50px;transition:background .3s,transform .2s,box-shadow .3s;white-space:nowrap;margin-left:8px;box-shadow:0 4px 20px rgba(106,118,80,.3);border:none;font-family:var(--ff-b);}
+.btn-book{background:var(--green);color:white;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;padding:9px 16px;border-radius:50px;transition:background .3s,transform .2s,box-shadow .3s;white-space:nowrap;margin-left:4px;box-shadow:0 4px 20px rgba(106,118,80,.3);border:none;font-family:var(--ff-b);}
 .btn-book:hover{background:var(--green-dark);transform:translateY(-1px);box-shadow:0 8px 28px rgba(106,118,80,.4);}
 
-/* Hamburger */
-.ham{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:none;border:none;margin-left:10px;}
-.ham span{display:block;width:22px;height:1.5px;background:var(--text);transition:.35s;}
-.ham.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
-.ham.open span:nth-child(2){opacity:0;}
+/* Hamburger — liquid glass like Account/menu-btn in test.html */
+.ham{
+  display:none;flex-direction:column;justify-content:center;align-items:center;
+  gap:5px;width:42px;height:42px;
+  border-radius:50%;cursor:pointer;z-index:1003;
+  transition:background .3s,box-shadow .3s;
+  position:relative;
+  border:none;
+  /* liquid glass */
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.2),0 2px 12px rgba(0,0,0,0.1);
+}
+.ham::before{
+  content:'';position:absolute;inset:0;padding:1px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(255,255,255,0.45) 0%,transparent 50%,rgba(255,255,255,0.15) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.ham span{display:block;width:18px;height:1.5px;background:white;border-radius:2px;transition:transform .35s,opacity .35s,background .3s;position:relative;z-index:1;}
+/* When header is scrolled — dark lines on light bg */
+.hdr.s .ham{background:rgba(106,118,80,.12);box-shadow:inset 0 1px 1px rgba(255,255,255,0.3),0 2px 8px rgba(0,0,0,0.08);}
+.hdr.s .ham span{background:var(--text);}
+/* Open state */
+.ham.open{background:rgba(106,118,80,.2);box-shadow:inset 0 1px 1px rgba(255,255,255,0.25),0 4px 16px rgba(106,118,80,0.2);}
+.ham.open span{background:var(--green-dark);}
+.ham.open span:nth-child(1){transform:rotate(45deg) translate(4.5px,4.5px);}
+.ham.open span:nth-child(2){opacity:0;transform:scaleX(0);}
 .ham.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px);}
 
 /* Mobile menu */
-.mob-menu{position:fixed;inset:0;background:rgba(255,247,238,.98);backdrop-filter:blur(30px);z-index:998;padding:100px 28px 40px;overflow-y:auto;transform:translateX(100%);transition:transform .4s cubic-bezier(.77,0,.18,1);}
+.mob-menu{position:fixed;inset:0;background:var(--beige);z-index:999;overflow-y:auto;transform:translateX(100%);transition:transform .45s cubic-bezier(.77,0,.18,1);}
 .mob-menu.open{transform:translateX(0);}
+
+/* Mobile menu header bar */
+.mob-menu-top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px 20px;
+  border-bottom:1px solid rgba(106,118,80,.1);
+  position:sticky;top:0;background:var(--beige);z-index:2;
+}
+.mob-brand{font-family:var(--ff-d);font-size:22px;font-weight:300;letter-spacing:4px;color:var(--green-dark);}
+.mob-close-btn{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(106,118,80,.08);
+  border:1px solid rgba(106,118,80,.18);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:var(--text-muted);
+  cursor:pointer;transition:background .25s,color .25s;
+}
+.mob-close-btn:hover{background:var(--green);color:white;border-color:var(--green);}
+
+/* Mobile menu body */
+.mob-body{padding:8px 24px 40px;}
 .mob-item{border-bottom:1px solid rgba(106,118,80,.1);}
-.mob-link{color:var(--text);font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:300;padding:16px 0;display:flex;justify-content:space-between;align-items:center;background:none;border:none;width:100%;font-family:var(--ff-b);}
-.mob-link .arr2{font-size:20px;color:var(--green);transition:transform .3s;line-height:1;}
-.mob-item.open .arr2{transform:rotate(45deg);}
-.mob-sub{display:none;padding:0 0 10px 14px;}
+.mob-link{color:var(--text);font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:300;padding:18px 0;display:flex;justify-content:space-between;align-items:center;background:none;border:none;width:100%;font-family:var(--ff-b);cursor:pointer;}
+.mob-link .arr2{
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(106,118,80,.08);border:1px solid rgba(106,118,80,.16);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--green);
+  transition:transform .3s,background .25s;flex-shrink:0;line-height:1;
+}
+.mob-item.open .arr2{transform:rotate(45deg);background:var(--green);color:white;border-color:var(--green);}
+.mob-sub{display:none;padding:4px 0 12px 4px;}
 .mob-item.open .mob-sub{display:block;}
-.mob-sub-lbl{font-size:9px;letter-spacing:2px;color:var(--green);text-transform:uppercase;padding:8px 0 3px;display:block;}
-.mob-sub a{display:block;color:var(--text-muted);font-size:12px;padding:6px 0;transition:color .2s;}
-.mob-sub a:hover{color:var(--green-dark);}
-.mob-book{display:block;background:var(--green);color:white;text-align:center;padding:14px;border-radius:50px;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;margin-top:24px;}
+.mob-sub-lbl{font-size:9px;letter-spacing:2px;color:var(--green);text-transform:uppercase;padding:10px 0 4px;display:block;font-weight:500;}
+.mob-sub a{
+  display:flex;align-items:center;gap:8px;
+  color:var(--text-muted);font-size:13px;
+  padding:9px 12px;border-radius:10px;
+  transition:background .2s,color .2s;
+}
+.mob-sub a::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--green);opacity:.5;flex-shrink:0;}
+.mob-sub a:hover{background:rgba(106,118,80,.07);color:var(--green-dark);}
+.mob-book{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--green);color:white;
+  padding:16px;border-radius:50px;
+  font-size:11px;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;
+  margin-top:28px;
+  box-shadow:0 8px 28px rgba(106,118,80,.3);
+  transition:background .3s,transform .2s,box-shadow .3s;
+}
+.mob-book:hover{background:var(--green-dark);transform:translateY(-2px);box-shadow:0 12px 36px rgba(106,118,80,.4);}
+/* Bottom tagline */
+.mob-tagline{text-align:center;margin-top:20px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);opacity:.5;}
 
 /* ═══ HERO ═══ */
 .hero{position:relative;height:100vh;min-height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .hero-vid-wrap{position:absolute;inset:0;}
 .hero-vid-wrap video{width:100%;height:100%;object-fit:cover;}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(26,31,20,.55) 0%,rgba(26,31,20,.25) 50%,rgba(26,31,20,.7) 100%);}
+/* Lighter overlay — let the glass do the work */
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(26,31,20,.35) 0%,rgba(26,31,20,.1) 50%,rgba(26,31,20,.55) 100%);}
 .orb{position:absolute;border-radius:50%;filter:blur(80px);animation:floatOrb 8s ease-in-out infinite;pointer-events:none;}
 .orb-1{width:300px;height:300px;background:rgba(138,150,104,.18);top:10%;left:5%;}
 .orb-2{width:200px;height:200px;background:rgba(138,150,104,.12);top:60%;right:8%;animation-delay:-3s;}
 .orb-3{width:150px;height:150px;background:rgba(138,150,104,.14);bottom:20%;left:20%;animation-delay:-5s;}
 @keyframes floatOrb{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-28px) scale(1.08);}}
-.hero-content{position:relative;z-index:2;text-align:center;padding:0 20px;max-width:880px;}
+
+/* Hero glass content card — liquid-glass-strong like Right Body panel */
+.hero-content{
+  position:relative;z-index:2;
+  text-align:center;padding:52px 60px;max-width:880px;
+  border-radius:32px;
+  /* Liquid glass strong */
+  background: rgba(255,255,255,0.04);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(40px) saturate(160%);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  box-shadow: 6px 6px 32px rgba(0,0,0,0.12), inset 0 1px 1px rgba(255,255,255,0.2);
+}
+/* Shimmer border on hero glass card */
+.hero-content::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  padding:1.4px;
+  border-radius:32px;
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,0.55) 0%,
+    rgba(255,255,255,0.2) 20%,
+    transparent 40%,
+    transparent 60%,
+    rgba(255,255,255,0.2) 80%,
+    rgba(255,255,255,0.55) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events:none;
+}
 .hero-eyebrow{display:flex;align-items:center;justify-content:center;gap:14px;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--green-xlight);font-weight:400;margin-bottom:20px;opacity:0;animation:fadeUp .8s .3s forwards;}
 .hero-eyebrow .ln{width:44px;height:1px;background:var(--green-xlight);opacity:.6;}
 .hero-title{font-family:var(--ff-d);font-weight:300;line-height:1;margin-bottom:10px;opacity:0;animation:fadeUp .9s .5s forwards;}
@@ -153,8 +411,29 @@ body.loading{overflow:hidden;}
 .hero-acts{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .95s forwards;}
 .btn-p{background:var(--green);color:white;border:none;padding:14px 30px;font-family:var(--ff-b);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;border-radius:50px;transition:.3s;display:inline-flex;align-items:center;gap:8px;}
 .btn-p:hover{background:var(--green-dark);transform:translateY(-2px);box-shadow:0 10px 30px rgba(106,118,80,.4);}
-.btn-o{background:transparent;color:white;border:1px solid rgba(255,255,255,.35);padding:14px 30px;font-family:var(--ff-b);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;border-radius:50px;transition:.3s;display:inline-flex;align-items:center;gap:8px;}
-.btn-o:hover{border-color:var(--green-xlight);color:var(--green-xlight);transform:translateY(-2px);}
+/* Outline button — liquid glass like Account btn in test.html */
+.btn-o{
+  color:white;
+  padding:14px 30px;font-family:var(--ff-b);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;border-radius:50px;
+  transition:.3s;display:inline-flex;align-items:center;gap:8px;
+  position:relative;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:none;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.18),0 2px 12px rgba(0,0,0,0.1);
+}
+.btn-o::before{
+  content:'';position:absolute;inset:0;padding:1.4px;border-radius:50px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.5) 0%,rgba(255,255,255,0.15) 25%,transparent 50%,rgba(255,255,255,0.15) 75%,rgba(255,255,255,0.5) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.btn-o:hover{background:rgba(255,255,255,0.16);color:white;transform:translateY(-2px);box-shadow:inset 0 1px 1px rgba(255,255,255,0.3),0 8px 28px rgba(0,0,0,0.15);}
+@media(max-width:768px){
+.hero-content{padding:36px 28px;border-radius:20px;}
+}
 .hero-scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp .8s 1.3s forwards;}
 .hero-scroll span{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);writing-mode:vertical-rl;}
 .scroll-ln{width:1px;height:48px;background:linear-gradient(to bottom,var(--green-xlight),transparent);animation:scrollPulse 2s ease-in-out infinite;}
@@ -620,39 +899,423 @@ section{padding:100px 0;}
 .form-btn:hover{background:var(--green-dark);transform:translateY(-2px);box-shadow:0 10px 30px rgba(106,118,80,.28);}
 
 /* ═══ FOOTER ═══ */
-.ftr-band{background:linear-gradient(135deg,var(--green) 0%,var(--green-dark) 100%);padding:clamp(48px,7vw,80px) 24px;text-align:center;position:relative;overflow:hidden;}
+/* ═══ FOOTER CTA BAND — liquid glass over green gradient ═══ */
+.ftr-band{
+  background:linear-gradient(135deg,var(--green) 0%,var(--green-dark) 100%);
+  padding:clamp(48px,7vw,80px) 24px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
 .ftr-band::before{content:"";position:absolute;top:-60%;left:-10%;width:65%;height:200%;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none;}
 .ftr-band h2{font-family:var(--ff-d);font-size:clamp(1.8rem,4.5vw,3.2rem);color:white;font-weight:300;margin-bottom:10px;position:relative;}
 .ftr-band p{font-size:13px;color:rgba(255,255,255,.65);margin-bottom:26px;position:relative;}
-.ftr-band-btn{display:inline-flex;align-items:center;gap:10px;padding:13px 34px;background:white;color:var(--green-dark);font-family:var(--ff-b);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;border-radius:50px;border:none;transition:all .35s;}
-.ftr-band-btn:hover{background:var(--beige);transform:translateY(-3px);box-shadow:0 12px 36px rgba(26,31,20,.18);}
-footer{background:var(--text);padding:68px 0 34px;}
-.ftr-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:44px;padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.07);}
+/* CTA button — liquid glass like the Account button in test.html */
+.ftr-band-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:13px 34px;
+  color:white;
+  font-family:var(--ff-b);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;
+  border-radius:50px;border:none;
+  transition:all .35s;
+  position:relative;
+  /* liquid glass */
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.25), 0 4px 16px rgba(0,0,0,0.12);
+}
+.ftr-band-btn::before{
+  content:'';position:absolute;inset:0;padding:1.4px;border-radius:50px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.5) 0%,rgba(255,255,255,0.15) 25%,transparent 50%,rgba(255,255,255,0.15) 75%,rgba(255,255,255,0.5) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.ftr-band-btn:hover{background:rgba(255,255,255,0.22);transform:translateY(-3px);box-shadow:inset 0 1px 1px rgba(255,255,255,0.35),0 12px 36px rgba(0,0,0,0.18);}
+
+/* ═══ FOOTER — glass morphic dark ═══ */
+footer{
+  background: linear-gradient(160deg, #1a1f14 0%, #232a1c 60%, #1a2214 100%);
+  padding:68px 0 34px;
+  position:relative;overflow:hidden;
+}
+/* Subtle background orbs for depth */
+footer::before{
+  content:'';position:absolute;
+  top:-120px;right:-80px;
+  width:500px;height:500px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(106,118,80,.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+footer::after{
+  content:'';position:absolute;
+  bottom:-100px;left:-60px;
+  width:400px;height:400px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(138,150,104,.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.ftr-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:16px;padding-bottom:28px;}
 .ftr-logo{font-family:var(--ff-d);font-size:26px;font-weight:300;letter-spacing:4px;color:white;margin-bottom:5px;display:block;}
 .ftr-tag{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green-light);margin-bottom:16px;display:block;}
 .ftr-about{font-size:13px;line-height:1.85;color:rgba(255,255,255,.38);max-width:280px;}
-.ftr-hours{margin-top:14px;padding:12px 14px;background:rgba(138,150,104,.07);border:1px solid rgba(138,150,104,.16);border-radius:8px;}
+
+/* Hours box — liquid glass light */
+.ftr-hours{
+  margin-top:14px;padding:14px 16px;
+  border-radius:14px;
+  position:relative;
+  background:rgba(138,150,104,0.06);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.08),0 2px 8px rgba(0,0,0,0.08);
+}
+.ftr-hours::before{
+  content:'';position:absolute;inset:0;padding:1px;border-radius:14px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.18) 0%,rgba(255,255,255,0.05) 40%,transparent 60%,rgba(255,255,255,0.05) 80%,rgba(255,255,255,0.18) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
 .ftr-hours-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green-light);margin-bottom:5px;display:block;}
 .ftr-hours p{font-size:11px;color:rgba(255,255,255,.38);line-height:1.8;}
 .ftr-soc{display:flex;gap:9px;margin-top:18px;}
-.soc{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,.45);transition:all .3s;}
-.soc:hover{background:rgba(138,150,104,.22);border-color:var(--green-light);color:var(--green-light);transform:translateY(-2px);}
+/* Social icon buttons — liquid glass */
+.soc{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:rgba(255,255,255,.55);
+  transition:all .3s;
+  position:relative;
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.1);
+}
+.soc::before{
+  content:'';position:absolute;inset:0;padding:1px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(255,255,255,0.3) 0%,transparent 50%,rgba(255,255,255,0.1) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.soc:hover{background:rgba(138,150,104,.22);color:var(--green-light);transform:translateY(-2px);box-shadow:inset 0 1px 1px rgba(255,255,255,0.2),0 4px 16px rgba(106,118,80,0.25);}
 .ftr-col h4{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--green-light);margin-bottom:16px;}
 .ftr-col ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
 .ftr-col li a{color:rgba(255,255,255,.38);font-size:13px;transition:color .25s,padding-left .2s;display:inline-block;letter-spacing:.3px;}
 .ftr-col li a:hover{color:var(--green-light);padding-left:4px;}
-.ftr-bot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:26px;}
+
+/* Glass card columns — liquid glass light applied to link columns */
+.ftr-glass-col{
+  padding:24px 20px;
+  border-radius:18px;
+  position:relative;
+  background:rgba(255,255,255,0.03);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.07),0 2px 16px rgba(0,0,0,0.1);
+  transition:background .3s,box-shadow .3s;
+}
+.ftr-glass-col:hover{
+  background:rgba(255,255,255,0.05);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.12),0 4px 24px rgba(0,0,0,0.14);
+}
+.ftr-glass-col::before{
+  content:'';position:absolute;inset:0;padding:1px;border-radius:18px;
+  background:linear-gradient(
+    160deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.06) 30%,
+    transparent 55%,
+    rgba(255,255,255,0.06) 80%,
+    rgba(255,255,255,0.18) 100%
+  );
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.ftr-glass-col > *{position:relative;z-index:1;}
+
+/* Brand column — slightly stronger glass */
+.ftr-brand-card{
+  padding:28px 24px;
+  border-radius:20px;
+  position:relative;
+  background:rgba(255,255,255,0.04);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.1),0 4px 24px rgba(0,0,0,0.14);
+}
+.ftr-brand-card::before{
+  content:'';position:absolute;inset:0;padding:1px;border-radius:20px;
+  background:linear-gradient(
+    160deg,
+    rgba(255,255,255,0.25) 0%,
+    rgba(255,255,255,0.08) 35%,
+    transparent 60%,
+    rgba(255,255,255,0.08) 80%,
+    rgba(255,255,255,0.22) 100%
+  );
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.ftr-brand-card > *{position:relative;z-index:1;}
+/* Footer bottom bar — glass pill */
+.ftr-bot{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+  margin-top:28px;
+  padding:18px 28px;
+  border-radius:50px;
+  position:relative;
+  background:rgba(255,255,255,0.03);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.07);
+}
+.ftr-bot::before{
+  content:'';position:absolute;inset:0;padding:1px;border-radius:50px;
+  background:linear-gradient(90deg,rgba(255,255,255,0.12) 0%,rgba(255,255,255,0.04) 40%,rgba(255,255,255,0.04) 60%,rgba(255,255,255,0.12) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.ftr-bot > *{position:relative;z-index:1;}
 .ftr-copy{font-size:11px;color:rgba(255,255,255,.22);letter-spacing:.5px;}
 .ftr-links{display:flex;gap:18px;}
 .ftr-links a{font-size:11px;color:rgba(255,255,255,.22);transition:color .25s;}
 .ftr-links a:hover{color:var(--green-light);}
+
+/* ═══════════════════════════════════════
+   STUDIO — MOBILE SCROLL GALLERY STRIP
+═══════════════════════════════════════ */
+
+/* Mobile swipeable strip for studio images */
+.studio-scroll-strip{display:none;}
+
+@media(max-width:768px){
+  /* Studio imgs: replace grid with horizontal scroll strip */
+  .studio-imgs{display:none!important;}
+
+  .studio-scroll-strip{
+    display:block;
+    margin-top:20px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding-bottom:4px;
+  }
+  .studio-scroll-strip::-webkit-scrollbar{display:none;}
+  .studio-strip-track{
+    display:flex;
+    gap:12px;
+    padding:0 20px 16px;
+    width:max-content;
+  }
+  .studio-strip-item{
+    flex:0 0 200px;
+    height:260px;
+    border-radius:18px;
+    overflow:hidden;
+    position:relative;
+    box-shadow:0 8px 32px rgba(26,31,20,.12);
+  }
+  .studio-strip-item:first-child{flex:0 0 260px;height:260px;}
+  .studio-strip-item img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    transition:transform .5s;
+  }
+  .studio-strip-item:active img{transform:scale(1.04);}
+  .studio-strip-item .s-strip-bg{
+    position:absolute;inset:0;
+    background:linear-gradient(135deg,var(--green-xlight),var(--beige-deep));
+  }
+  .studio-strip-item .s-strip-lbl{
+    position:absolute;bottom:0;left:0;right:0;z-index:2;
+    padding:32px 14px 14px;
+    background:linear-gradient(to top,rgba(26,31,20,.72),transparent);
+    font-size:10px;letter-spacing:2px;text-transform:uppercase;
+    color:rgba(255,255,255,.92);
+  }
+  /* Scroll hint dots */
+  .studio-scroll-dots{
+    display:flex;gap:5px;justify-content:center;margin-top:8px;
+  }
+  .studio-scroll-dots span{
+    width:5px;height:5px;border-radius:50%;
+    background:rgba(106,118,80,.25);transition:all .3s;
+  }
+  .studio-scroll-dots span.act{
+    background:var(--green);width:18px;border-radius:50px;
+  }
+}
+
+/* ═══════════════════════════════════════
+   GALLERY — MOBILE BACK-TO-BACK PHOTO FEED
+═══════════════════════════════════════ */
+@media(max-width:768px){
+
+  /* Header */
+  .gal-inner{padding:clamp(60px,10vw,100px) 0 clamp(60px,10vw,100px);}
+  .gal-hdr{
+    padding:0 16px;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:14px;
+    margin-bottom:20px;
+  }
+
+  /* Filter pills: single horizontal scroll row, no wrap */
+  .gal-filters{
+    display:flex;
+    gap:7px;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    width:100%;
+    padding-bottom:2px;
+  }
+  .gal-filters::-webkit-scrollbar{display:none;}
+  .gf{
+    flex:0 0 auto;
+    font-size:9px;
+    letter-spacing:1.5px;
+    padding:7px 13px;
+    white-space:nowrap;
+    border-radius:50px;
+  }
+
+  /* ── COMPLETELY OVERRIDE GRID → 2-col back-to-back ── */
+  .gal-grid{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    grid-auto-rows:unset !important;
+    gap:8px !important;
+    padding:0 12px;
+  }
+
+  /* Reset every item to normal flow — explicit pixel height */
+  .gal-grid .g-item{
+    grid-column:unset !important;
+    grid-row:unset !important;
+    border-radius:14px !important;
+    height:160px !important;
+    overflow:hidden;
+    position:relative;
+    cursor:pointer;
+    transition:transform .3s,box-shadow .3s;
+  }
+  /* g-ph must fill the fixed height */
+  .gal-grid .g-item .g-ph{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:flex-end;
+  }
+  .gal-grid .g-item .g-ph img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+  /* Hero card — full width, taller */
+  .gal-grid .g1{
+    grid-column:1 / -1 !important;
+    height:220px !important;
+  }
+
+  /* Wide accent cards — full width */
+  .gal-grid .g6{
+    grid-column:1 / -1 !important;
+    height:190px !important;
+  }
+  .gal-grid .g9{
+    grid-column:1 / -1 !important;
+    height:180px !important;
+  }
+
+  /* Slightly taller for visual rhythm */
+  .gal-grid .g3{ height:180px !important; }
+  .gal-grid .g8{ height:185px !important; }
+
+  /* Label */
+  .gal-grid .g-lbl{
+    font-size:9px;
+    letter-spacing:1.5px;
+    padding:10px 12px;
+  }
+
+  /* Lightbox mobile */
+  .lb-inner{width:92vw;height:58vw;max-height:360px;}
+  .lb-close{top:14px;right:14px;width:36px;height:36px;font-size:15px;}
+}
+
+/* ═══════════════════════════════════════
+   TECHNOLOGY & EQUIPMENT — REDESIGNED
+═══════════════════════════════════════ */
+#technology{background:var(--beige-deep);padding:100px 0;position:relative;overflow:hidden;}
+#technology::before{content:"";position:absolute;top:-120px;right:-120px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(106,118,80,.07) 0%,transparent 70%);pointer-events:none;}
+#technology::after{content:"";position:absolute;bottom:-80px;left:-80px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(106,118,80,.05) 0%,transparent 70%);pointer-events:none;}
+
+.tech-tabs{display:flex;gap:0;background:rgba(255,255,255,.7);backdrop-filter:blur(12px);border:1px solid rgba(106,118,80,.16);border-radius:50px;padding:5px;width:fit-content;margin:0 auto 56px;box-shadow:0 4px 20px rgba(106,118,80,.08);flex-wrap:wrap;justify-content:center;}
+.tech-tab-btn{padding:11px 28px;border-radius:50px;font-size:10px;letter-spacing:2px;text-transform:uppercase;background:transparent;border:none;color:var(--text-muted);transition:all .35s;font-family:var(--ff-b);cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;}
+.tech-tab-btn.active{background:var(--green);color:white;font-weight:600;box-shadow:0 4px 16px rgba(106,118,80,.3);}
+
+.tech-panel{display:none;}
+.tech-panel.active{display:block;animation:fadeUp .5s var(--ease);}
+
+.tech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+
+.tech-card{background:white;border:1px solid rgba(106,118,80,.12);border-radius:20px;overflow:hidden;transition:transform .4s var(--ease),box-shadow .4s,border-color .4s;position:relative;display:flex;flex-direction:column;box-shadow:0 2px 12px rgba(26,31,20,.05);}
+.tech-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(26,31,20,.12);border-color:rgba(106,118,80,.28);}
+.tech-card::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--green-dark),var(--green),var(--green-light));transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease);z-index:2;}
+.tech-card:hover::after{transform:scaleX(1);}
+
+.tech-icon-wrap{height:100px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0;}
+.tech-icon-inner{font-size:40px;position:relative;z-index:1;transition:transform .4s var(--ease);filter:drop-shadow(0 4px 12px rgba(26,31,20,.15));}
+.tech-card:hover .tech-icon-inner{transform:scale(1.18) translateY(-4px);}
+
+.tech-body{padding:20px 22px 24px;flex:1;display:flex;flex-direction:column;}
+.tech-tag{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--green);margin-bottom:8px;font-weight:500;}
+.tech-title{font-family:var(--ff-d);font-size:20px;font-weight:400;color:var(--text);line-height:1.25;margin-bottom:10px;}
+.tech-desc{font-size:12.5px;line-height:1.8;color:var(--text-muted);margin-bottom:14px;flex:1;}
+.tech-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:auto;}
+.tech-list li{font-size:11.5px;color:var(--text-muted);display:flex;align-items:center;gap:8px;transition:color .25s;}
+.tech-list li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;transition:transform .25s;}
+.tech-card:hover .tech-list li{color:var(--green-dark);}
+.tech-card:hover .tech-list li::before{transform:scale(1.4);}
+
+/* Yoga props horizontal cards */
+.yoga-props-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+.tech-card.horiz{flex-direction:row;align-items:stretch;}
+.tech-card.horiz .tech-icon-wrap{width:110px;height:auto;min-height:120px;flex-shrink:0;border-radius:0;}
+.tech-card.horiz .tech-body{padding:20px;}
+.tech-card.horiz .tech-title{font-size:18px;}
+
+/* Stats intro strip */
+.tech-intro-band{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(106,118,80,.1);border-radius:16px;overflow:hidden;margin-bottom:52px;}
+.tib-item{background:white;padding:22px 24px;text-align:center;}
+.tib-num{font-family:var(--ff-d);font-size:36px;font-weight:300;color:var(--green-dark);display:block;line-height:1;}
+.tib-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-top:5px;display:block;}
 
 /* ═══ RESPONSIVE ═══ */
 @media(max-width:1024px){
   .nav-l,.nav-r{display:none;}
   .ham{display:flex;}
   .btn-book.desk{display:none;}
+  /* Pill nav on scroll: proper side margins on tablet/mobile */
   .hdr.s .nav-wrap{margin:10px 16px;}
+  /* Nav-wrap on mobile: just logo placeholder + hamburger */
+  .nav-wrap{padding:0 20px;}
   .studio-hdr{grid-template-columns:1fr;gap:30px;}
   .studio-imgs{grid-template-columns:1fr 1fr;grid-template-rows:auto;}
   .si-tall{grid-row:span 1;}
@@ -664,6 +1327,9 @@ footer{background:var(--text);padding:68px 0 34px;}
   .fnd-idx{display:none;}
   .fnd-scroll-space{height:260vh;}
   .fnd-dots{display:none;}
+  /* Tech grid tablet */
+  .tech-grid{grid-template-columns:repeat(2,1fr);}
+  .yoga-props-grid{grid-template-columns:1fr 1fr;}
   /* Journey tablet */
   .ji{gap:0;}
   .ji-img-col{padding:0 30px 0 0;}
@@ -678,7 +1344,7 @@ footer{background:var(--text);padding:68px 0 34px;}
   .g6{grid-column:span 6;grid-row:span 3;}
   .g7,.g8{grid-column:span 3;grid-row:span 2;}
   .g9{grid-column:span 6;grid-row:span 3;}
-  .ftr-grid{grid-template-columns:1fr 1fr;gap:32px;}
+  .ftr-grid{grid-template-columns:1fr 1fr;gap:12px;}
   .ct-grid{grid-template-columns:1fr;gap:44px;}
   .svc-card{flex:0 0 280px;}
 }
@@ -699,13 +1365,45 @@ footer{background:var(--text);padding:68px 0 34px;}
   /* Reset slide direction for mobile */
   .ji .ji-img-col,.ji .ji-txt-col,.ji.odd .ji-img-col,.ji.odd .ji-txt-col{transform:translateY(24px);}
   .ji.vis .ji-img-col,.ji.vis .ji-txt-col{transform:none;}
-  .studio-imgs{grid-template-columns:1fr;}
-  .gal-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:120px;}
-  .g1,.g2,.g3,.g4,.g5,.g6,.g7,.g8,.g9{grid-column:span 2;grid-row:span 2;}
-  .ftr-grid{grid-template-columns:1fr;gap:28px;}
+  /* Studio hdr on mobile */
+  .studio-inner{padding:clamp(60px,8vw,100px) clamp(18px,5vw,32px);}
+  .studio-hdr{
+    grid-template-columns:1fr;
+    gap:28px;
+    margin-bottom:28px;
+  }
+  .s-stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:0;
+    border:1px solid rgba(106,118,80,.14);
+    border-radius:16px;
+    overflow:hidden;
+    background:white;
+  }
+  .s-stat{
+    padding:16px 12px;
+    border-bottom:none;
+    border-right:1px solid rgba(106,118,80,.14);
+    text-align:center;
+  }
+  .s-stat:last-child{border-right:none;}
+  .s-stat strong{font-size:20px;}
+  .s-stat span{font-size:8px;}
+  /* Studio video */
+  .studio-ph{height:clamp(200px,52vw,340px);}
+  .studio-vid-wrap{margin-bottom:16px;}
+  .ftr-grid{grid-template-columns:1fr;gap:10px;}
   .ftr-bot{flex-direction:column;text-align:center;}
   .form-row{grid-template-columns:1fr;}
   .dd.wide{min-width:280px;grid-template-columns:1fr;}
+  /* Tech grid mobile */
+  .tech-grid{grid-template-columns:1fr;}
+  .yoga-props-grid{grid-template-columns:1fr;}
+  .tech-card.horiz{flex-direction:column;}
+  .tech-card.horiz .tech-icon-wrap{width:100%;height:80px;}
+  .tech-intro-band{grid-template-columns:repeat(3,1fr);}
+  .tech-tabs{padding:4px;}
   .svc-card{flex:0 0 260px;}
   .yoga-card{flex:0 0 270px;height:380px;}
   .physio-card{flex:0 0 270px;height:360px;}
@@ -714,6 +1412,7 @@ footer{background:var(--text);padding:68px 0 34px;}
 }
 @media(max-width:480px){
   .container{padding:0 18px;}
+  .studio-inner{padding:clamp(52px,8vw,80px) 16px;}
   .hero-title .t1{font-size:clamp(38px,11vw,68px);}
   .hero-title .t2{font-size:clamp(40px,11.5vw,72px);}
   .hero-acts{gap:8px;}
@@ -723,6 +1422,13 @@ footer{background:var(--text);padding:68px 0 34px;}
   .physio-card,.workshop-card{height:340px;}
   .event-card{height:320px;}
   .svc-f{padding:8px 12px;font-size:9px;}
+  /* Gallery tighter on very small */
+  .gal-grid{gap:6px !important;padding:0 10px !important;}
+  .gal-grid .g1{height:185px !important;}
+  .gal-grid .g6{height:165px !important;}
+  .gal-grid .g9{height:158px !important;}
+  .gal-grid .g-item{height:145px !important;}
+  .gal-grid .g3,.gal-grid .g8{height:165px !important;}
 }
 </style>
 </head>
@@ -772,6 +1478,7 @@ footer{background:var(--text);padding:68px 0 34px;}
       <div class="nav-item">
         <a href="#yoga" class="nl">Yoga <span class="arr"></span></a>
         <div class="dd">
+          <a href="#yoga">Adult Yoga</a>
           <a href="#yoga">Therapeutic Personal Yoga</a>
           <a href="#yoga">Kids Yoga</a>
           <a href="#yoga">Prenatal / Postnatal Yoga</a>
@@ -784,17 +1491,20 @@ footer{background:var(--text);padding:68px 0 34px;}
         <div class="dd wide">
           <div class="dc">
             <span class="dd-label">Rehabilitation</span>
-            <a href="#physio">Ortho</a><a href="#physio">Cardio</a><a href="#physio">Neuro</a>
-            <a href="#physio">Paediatric</a><a href="#physio">Sports Injury</a><a href="#physio">Women Care</a>
+            <a href="#physio">Pain Relief &amp; Recovery</a><a href="#physio">Injury Rehab &amp; Return to Activity</a><a href="#physio">Movement &amp; Restoration</a>
+            <a href="#physio">Neuro Rehab &amp; Balance Care</a><a href="#physio">Heart &amp; Lung Care</a><a href="#physio">Women's Wellness Care</a>
+            <a href="#physio">Active Aging &amp; Senior Care</a><a href="#physio">Kids Movement &amp; Development</a><a href="#physio">Posture &amp; Lifestyle Correction</a>
           </div>
           <div class="dc">
             <span class="dd-label">Performance Enhancement</span>
-            <a href="#physio">Dry / Wet / Moving Cupping</a>
-            <a href="#physio">Dynamic &amp; Fire Cupping</a>
+            <a href="#physio">Dry Cupping</a>
+            <a href="#physio">Wet Cupping</a>
+            <a href="#physio">Fire Cupping</a>
+            <a href="#physio">Moving Cupping</a>
             <a href="#physio">Dry Needling</a>
-            <a href="#physio">IASTM</a>
-            <a href="#physio">Sports Massage</a>
             <a href="#physio">Kinesio Taping</a>
+            <a href="#physio">IASTM</a>
+            <a href="#physio">Sports / Therapeutic Massage</a>
           </div>
         </div>
       </div>
@@ -824,10 +1534,14 @@ footer{background:var(--text);padding:68px 0 34px;}
         <a href="#events" class="nl">Events <span class="arr"></span></a>
         <div class="dd">
           <a href="#events">Summer Camp</a>
-          <a href="#events">Celebrations</a>
+          <a href="#events">Wellness Celebrations</a>
           <a href="#events">Healthy Kitty Parties</a>
+          <a href="#events">Corporate Wellness Sessions</a>
+          <a href="#events">Couple &amp; Partner Yoga</a>
+          <a href="#events">Kids Activity &amp; Yoga Workshops</a>
         </div>
       </div>
+      <a href="#technology" class="nl">Technology</a>
       <a href="#contact" class="btn-book desk">Book Now →</a>
     </nav>
     <button class="ham" id="hamBtn" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -836,13 +1550,24 @@ footer{background:var(--text);padding:68px 0 34px;}
 
 <!-- MOBILE MENU -->
 <div class="mob-menu" id="mobMenu">
-  <div class="mob-item"><button class="mob-link" onclick="mobToggle(this)">About <span class="arr2">+</span></button><div class="mob-sub"><a href="#studio" onclick="closeMob()">Our Studio</a><a href="#founders" onclick="closeMob()">Our Founders</a><a href="#journey" onclick="closeMob()">Our Journey</a><a href="#gallery" onclick="closeMob()">Gallery</a></div></div>
-  <div class="mob-item"><button class="mob-link" onclick="mobToggle(this)">Yoga <span class="arr2">+</span></button><div class="mob-sub"><a href="#yoga" onclick="closeMob()">Therapeutic Personal Yoga</a><a href="#yoga" onclick="closeMob()">Kids Yoga</a><a href="#yoga" onclick="closeMob()">Prenatal / Postnatal Yoga</a><a href="#yoga" onclick="closeMob()">Vinyasa / Power Yoga</a><a href="#yoga" onclick="closeMob()">Aerial Yoga</a></div></div>
-  <div class="mob-item"><button class="mob-link" onclick="mobToggle(this)">Physiotherapy <span class="arr2">+</span></button><div class="mob-sub"><span class="mob-sub-lbl">Rehabilitation</span><a href="#physio" onclick="closeMob()">Ortho</a><a href="#physio" onclick="closeMob()">Cardio</a><a href="#physio" onclick="closeMob()">Neuro</a><a href="#physio" onclick="closeMob()">Paediatric</a><a href="#physio" onclick="closeMob()">Sports Injury</a><a href="#physio" onclick="closeMob()">Women Care</a><span class="mob-sub-lbl">Performance</span><a href="#physio" onclick="closeMob()">Cupping (all types)</a><a href="#physio" onclick="closeMob()">Dry Needling</a><a href="#physio" onclick="closeMob()">IASTM</a><a href="#physio" onclick="closeMob()">Sports Massage</a><a href="#physio" onclick="closeMob()">Kinesio Taping</a></div></div>
-  <div class="mob-item"><button class="mob-link" onclick="mobToggle(this)">Workshops <span class="arr2">+</span></button><div class="mob-sub"><a href="#workshops" onclick="closeMob()">Yoga Nidra</a><a href="#workshops" onclick="closeMob()">Mindfulness Meditation</a><a href="#workshops" onclick="closeMob()">Pranayama</a><a href="#workshops" onclick="closeMob()">Sound Healing</a><a href="#workshops" onclick="closeMob()">Yin Yoga</a><a href="#workshops" onclick="closeMob()">Restorative Yoga</a><a href="#workshops" onclick="closeMob()">Face Yoga</a></div></div>
-  <div class="mob-item"><button class="mob-link" onclick="mobToggle(this)">Nutrition <span class="arr2">+</span></button><div class="mob-sub"><a href="#diet" onclick="closeMob()">Condition Based</a><a href="#diet" onclick="closeMob()">Weight Management</a><a href="#diet" onclick="closeMob()">Balanced Lifestyle</a></div></div>
-  <div class="mob-item"><button class="mob-link" onclick="mobToggle(this)">Special Events <span class="arr2">+</span></button><div class="mob-sub"><a href="#events" onclick="closeMob()">Summer Camp</a><a href="#events" onclick="closeMob()">Celebrations</a><a href="#events" onclick="closeMob()">Healthy Kitty Parties</a></div></div>
-  <a href="#contact" class="mob-book" onclick="closeMob()">Book Now →</a>
+  <div class="mob-menu-top">
+    <span class="mob-brand">Kaya Haus</span>
+    <button class="mob-close-btn" onclick="closeMob()" aria-label="Close menu">✕</button>
+  </div>
+  <div class="mob-body">
+    <div class="mob-item"><button class="mob-link" onclick="mobToggle(this)">About <span class="arr2">+</span></button><div class="mob-sub"><a href="#studio" onclick="closeMob()">Our Studio</a><a href="#founders" onclick="closeMob()">Our Founders</a><a href="#journey" onclick="closeMob()">Our Journey</a><a href="#gallery" onclick="closeMob()">Gallery</a></div></div>
+    <div class="mob-item"><button class="mob-link" onclick="mobToggle(this)">Yoga <span class="arr2">+</span></button><div class="mob-sub"><a href="#yoga" onclick="closeMob()">Adult Yoga</a><a href="#yoga" onclick="closeMob()">Therapeutic Personal Yoga</a><a href="#yoga" onclick="closeMob()">Kids Yoga</a><a href="#yoga" onclick="closeMob()">Prenatal / Postnatal Yoga</a><a href="#yoga" onclick="closeMob()">Vinyasa / Power Yoga</a><a href="#yoga" onclick="closeMob()">Aerial Yoga</a></div></div>
+    <div class="mob-item"><button class="mob-link" onclick="mobToggle(this)">Physiotherapy <span class="arr2">+</span></button><div class="mob-sub"><span class="mob-sub-lbl">Rehabilitation</span><a href="#physio" onclick="closeMob()">Pain Relief &amp; Recovery</a><a href="#physio" onclick="closeMob()">Injury Rehab &amp; Return to Activity</a><a href="#physio" onclick="closeMob()">Movement &amp; Restoration</a><a href="#physio" onclick="closeMob()">Neuro Rehab &amp; Balance Care</a><a href="#physio" onclick="closeMob()">Heart &amp; Lung Care</a><a href="#physio" onclick="closeMob()">Women's Wellness Care</a><a href="#physio" onclick="closeMob()">Active Aging &amp; Senior Care</a><a href="#physio" onclick="closeMob()">Kids Movement &amp; Development</a><a href="#physio" onclick="closeMob()">Posture &amp; Lifestyle Correction</a><span class="mob-sub-lbl">Performance</span><a href="#physio" onclick="closeMob()">Dry Cupping</a><a href="#physio" onclick="closeMob()">Wet Cupping</a><a href="#physio" onclick="closeMob()">Fire Cupping</a><a href="#physio" onclick="closeMob()">Moving Cupping</a><a href="#physio" onclick="closeMob()">Dry Needling</a><a href="#physio" onclick="closeMob()">IASTM</a><a href="#physio" onclick="closeMob()">Sports Massage</a><a href="#physio" onclick="closeMob()">Kinesio Taping</a></div></div>
+    <div class="mob-item"><button class="mob-link" onclick="mobToggle(this)">Workshops <span class="arr2">+</span></button><div class="mob-sub"><a href="#workshops" onclick="closeMob()">Yoga Nidra</a><a href="#workshops" onclick="closeMob()">Mindfulness Meditation</a><a href="#workshops" onclick="closeMob()">Pranayama</a><a href="#workshops" onclick="closeMob()">Sound Healing</a><a href="#workshops" onclick="closeMob()">Yin Yoga</a><a href="#workshops" onclick="closeMob()">Restorative Yoga</a><a href="#workshops" onclick="closeMob()">Face Yoga</a></div></div>
+    <div class="mob-item"><button class="mob-link" onclick="mobToggle(this)">Nutrition <span class="arr2">+</span></button><div class="mob-sub"><a href="#diet" onclick="closeMob()">Condition Based</a><a href="#diet" onclick="closeMob()">Weight Management</a><a href="#diet" onclick="closeMob()">Balanced Lifestyle</a></div></div>
+    <div class="mob-item"><button class="mob-link" onclick="mobToggle(this)">Special Events <span class="arr2">+</span></button><div class="mob-sub"><a href="#events" onclick="closeMob()">Summer Camp</a><a href="#events" onclick="closeMob()">Wellness Celebrations</a><a href="#events" onclick="closeMob()">Healthy Kitty Parties</a><a href="#events" onclick="closeMob()">Corporate Wellness Sessions</a><a href="#events" onclick="closeMob()">Couple &amp; Partner Yoga</a><a href="#events" onclick="closeMob()">Kids Activity &amp; Yoga Workshops</a></div></div>
+    <div class="mob-item"><a href="#technology" class="mob-link" onclick="closeMob()" style="border:none;background:none;font-family:var(--ff-b);">Technology &amp; Equipment <span class="arr2" style="font-size:10px;">→</span></a></div>
+    <a href="#contact" class="mob-book" onclick="closeMob()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Book a Session
+    </a>
+    <p class="mob-tagline">Art of Balance · Ahmedabad</p>
+  </div>
 </div>
 
 <!-- HERO -->
@@ -855,9 +1580,13 @@ footer{background:var(--text);padding:68px 0 34px;}
   <div class="hero-overlay"></div>
   <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow"><span class="ln"></span>Welcome to Kaya Haus<span class="ln"></span></div>
-    <h1 class="hero-title"><span class="t1">Art of</span><span class="t2">Balance</span></h1>
-    <p class="hero-sub"><span>Yoga</span><span class="dot">·</span><span>Physiotherapy</span><span class="dot">·</span><span>Wellness</span></p>
+    <div class="hero-eyebrow"><span class="ln"></span>BREATHE. BALANCE. BECOME.<span class="ln"></span></div>
+    <div style="margin-bottom:14px;opacity:0;animation:fadeUp .7s .15s forwards;">
+      <span style="font-family:var(--ff-b);font-size:11px;letter-spacing:5px;text-transform:lowercase;color:rgba(255,255,255,.55);">physiotherapy &amp; yoga studio</span>
+    </div>
+    <h1 class="hero-title"><span class="t1">Kaya</span><span class="t2">Haus</span></h1>
+    <p style="font-family:var(--ff-b);font-size:12px;letter-spacing:2px;color:rgba(255,255,255,.45);margin-top:-4px;margin-bottom:18px;opacity:0;animation:fadeUp .7s .6s forwards;">Where healing meets movement</p>
+    <p class="hero-sub"><span>Yoga</span><span class="dot">·</span><span>Physiotherapy</span></p>
     <div class="hero-acts">
       <a href="#contact" class="btn-p">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
@@ -892,7 +1621,7 @@ footer{background:var(--text);padding:68px 0 34px;}
         <p class="studio-desc">Kaya Haus is a premium wellness studio in the heart of Ahmedabad — where clinical precision meets the art of movement. Thoughtfully designed to support your healing, growth, and transformation at every stage.</p>
       </div>
       <div class="s-stats reveal-r">
-        <div class="s-stat"><strong>2019</strong><span>Founded</span></div>
+        <div class="s-stat"><strong>Since 2019</strong><span>Founded</span></div>
         <div class="s-stat"><strong>3000 sq ft</strong><span>Studio Space</span></div>
         <div class="s-stat"><strong>100%</strong><span>Evidence Based</span></div>
       </div>
@@ -916,6 +1645,39 @@ footer{background:var(--text);padding:68px 0 34px;}
       <div><div class="img-box" style="height:180px;"><img src="studio3.jpg" alt="Physio Bay" onerror="this.style.display='none'"/><span class="img-lbl">Physio Bay</span></div></div>
       <div><div class="img-box" style="height:180px;"><img src="studio4.jpg" alt="Wellness Corner" onerror="this.style.display='none'"/><span class="img-lbl">Wellness Corner</span></div></div>
       <div><div class="img-box" style="height:180px;"><img src="studio5.jpg" alt="Equipment Zone" onerror="this.style.display='none'"/><span class="img-lbl">Equipment Zone</span></div></div>
+    </div>
+    <!-- MOBILE ONLY: swipeable horizontal strip -->
+    <div class="studio-scroll-strip reveal" id="stStrip">
+      <div class="studio-strip-track" id="stTrack">
+        <div class="studio-strip-item">
+          <div class="s-strip-bg" style="background:linear-gradient(135deg,var(--green-xlight),var(--beige-deep));"></div>
+          <img src="studio1.jpg" alt="Movement Studio" onerror="this.style.display='none'"/>
+          <span class="s-strip-lbl">Movement Studio</span>
+        </div>
+        <div class="studio-strip-item">
+          <div class="s-strip-bg" style="background:linear-gradient(160deg,var(--beige-deep),var(--green-xlight));"></div>
+          <img src="studio2.jpg" alt="Aerial Rig" onerror="this.style.display='none'"/>
+          <span class="s-strip-lbl">Aerial Rig</span>
+        </div>
+        <div class="studio-strip-item">
+          <div class="s-strip-bg" style="background:linear-gradient(120deg,var(--green-xlight),var(--beige));"></div>
+          <img src="studio3.jpg" alt="Physio Bay" onerror="this.style.display='none'"/>
+          <span class="s-strip-lbl">Physio Bay</span>
+        </div>
+        <div class="studio-strip-item">
+          <div class="s-strip-bg" style="background:linear-gradient(200deg,var(--beige),var(--green-xlight));"></div>
+          <img src="studio4.jpg" alt="Wellness Corner" onerror="this.style.display='none'"/>
+          <span class="s-strip-lbl">Wellness Corner</span>
+        </div>
+        <div class="studio-strip-item">
+          <div class="s-strip-bg" style="background:linear-gradient(135deg,var(--beige-deep),var(--green-xlight));"></div>
+          <img src="studio5.jpg" alt="Equipment Zone" onerror="this.style.display='none'"/>
+          <span class="s-strip-lbl">Equipment Zone</span>
+        </div>
+      </div>
+      <div class="studio-scroll-dots" id="stDots">
+        <span class="act"></span><span></span><span></span><span></span><span></span>
+      </div>
     </div>
   </div>
 </section>
@@ -1037,20 +1799,19 @@ footer{background:var(--text);padding:68px 0 34px;}
       <div class="gal-filters">
         <button class="gf active" data-filter="all">All</button>
         <button class="gf" data-filter="yoga">Yoga</button>
-        <button class="gf" data-filter="physio">Physio</button>
-        <button class="gf" data-filter="aerial">Aerial</button>
+        <button class="gf" data-filter="physio">Physiotherapy</button>
         <button class="gf" data-filter="events">Events</button>
       </div>
     </div>
     <div class="gal-grid" id="galGrid">
       <div class="g-item g1" data-cat="yoga" onclick="openLb('Power Yoga')"><div class="g-ph gc1"><img src="photo.jpg" alt="" onerror="this.remove()"/><div class="g-ov"></div><span class="g-lbl">Power Yoga</span></div></div>
-      <div class="g-item g2" data-cat="aerial" onclick="openLb('Aerial Yoga')"><div class="g-ph gc2"><img src="gal2.jpg" alt="" onerror="this.remove()"/><div class="g-ov"></div><span class="g-lbl">Aerial Yoga</span></div></div>
+      <div class="g-item g2" data-cat="yoga" onclick="openLb('Aerial Yoga')"><div class="g-ph gc2"><img src="gal2.jpg" alt="" onerror="this.remove()"/><div class="g-ov"></div><span class="g-lbl">Aerial Yoga</span></div></div>
       <div class="g-item g3" data-cat="physio" onclick="openLb('Physiotherapy')"><div class="g-ph gc3"><img src="gal3.jpg" alt="" onerror="this.remove()"/><div class="g-ov"></div><span class="g-lbl">Physiotherapy</span></div></div>
       <div class="g-item g4" data-cat="yoga" onclick="openLb('Vinyasa Flow')"><div class="g-ph gc4"><img src="gal4.jpg" alt="" onerror="this.remove()"/><div class="g-ov"></div><span class="g-lbl">Vinyasa Flow</span></div></div>
       <div class="g-item g5" data-cat="events" onclick="openLb('Workshop')"><div class="g-ph gc1"><img src="photo.jpg" alt="" onerror="this.remove()"/><div class="g-ov"></div><span class="g-lbl">Workshop</span></div></div>
       <div class="g-item g6" data-cat="yoga" onclick="openLb('Meditation')"><div class="g-ph gc2"><img src="gal6.jpg" alt="" onerror="this.remove()"/><div class="g-ov"></div><span class="g-lbl">Meditation</span></div></div>
       <div class="g-item g7" data-cat="physio" onclick="openLb('Dry Needling')"><div class="g-ph gc3"><img src="gal7.jpg" alt="" onerror="this.remove()"/><div class="g-ov"></div><span class="g-lbl">Dry Needling</span></div></div>
-      <div class="g-item g8" data-cat="aerial" onclick="openLb('Aerial Therapy')"><div class="g-ph gc4"><img src="gal8.jpg" alt="" onerror="this.remove()"/><div class="g-ov"></div><span class="g-lbl">Aerial Therapy</span></div></div>
+      <div class="g-item g8" data-cat="yoga" onclick="openLb('Aerial Therapy')"><div class="g-ph gc4"><img src="gal8.jpg" alt="" onerror="this.remove()"/><div class="g-ov"></div><span class="g-lbl">Aerial Therapy</span></div></div>
       <div class="g-item g9" data-cat="events" onclick="openLb('Special Events')"><div class="g-ph gc1"><img src="gal9.jpg" alt="" onerror="this.remove()"/><div class="g-ov"></div><span class="g-lbl">Special Events</span></div></div>
     </div>
   </div>
@@ -1070,6 +1831,7 @@ footer{background:var(--text);padding:68px 0 34px;}
     </div>
     <div class="svc-filters" id="yfil">
       <button class="svc-f active" data-t="all"><span>All</span></button>
+      <button class="svc-f" data-t="adult"><span>Adult Yoga</span></button>
       <button class="svc-f" data-t="therapeutic"><span>Therapeutic</span></button>
       <button class="svc-f" data-t="kids"><span>Kids</span></button>
       <button class="svc-f" data-t="prenatal"><span>Prenatal</span></button>
@@ -1080,6 +1842,12 @@ footer{background:var(--text);padding:68px 0 34px;}
       <div class="svc-mask" id="yMask">
         <div class="svc-track auto" id="yTrack">
           <!-- YOGA FLIP CARDS -->
+          <div class="yoga-card" data-type="adult" onclick="this.classList.toggle('flipped')">
+            <div class="yoga-card-inner">
+              <div class="yoga-front"><div style="background:linear-gradient(135deg,#d8e8d0,#c8dcc0);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.18">🧘‍♀️</span></div><div class="yoga-front-overlay"></div><div class="yoga-flip-hint">↺</div><div class="yoga-front-content"><span class="yoga-front-badge">Group & Personal</span><div class="yoga-front-title">Adult Yoga</div><div class="yoga-front-sub">Strength · Flexibility · Peace</div></div></div>
+              <div class="yoga-back"><div><span class="yoga-back-tag">Yoga Practice</span><div class="yoga-back-name">Adult Yoga</div><div class="yoga-back-sub">Strength · Flexibility · Inner Peace</div><p class="yoga-back-desc">Yoga classes designed for adults of all levels — from beginners to experienced practitioners. Improve flexibility, build strength, reduce stress, and cultivate mindfulness in a supportive, welcoming environment.</p></div><a href="#contact" class="yoga-back-cta">Enquire Now →</a><div class="yoga-back-deco">✦</div></div>
+            </div>
+          </div>
           <div class="yoga-card" data-type="therapeutic" onclick="this.classList.toggle('flipped')">
             <div class="yoga-card-inner">
               <div class="yoga-front"><div style="background:linear-gradient(135deg,var(--green-xlight),var(--beige-deep));position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.18">🧘</span></div><div class="yoga-front-overlay"></div><div class="yoga-flip-hint">↺</div><div class="yoga-front-content"><span class="yoga-front-badge">One-to-one</span><div class="yoga-front-title">Therapeutic Personal Yoga</div><div class="yoga-front-sub">Healing · Personalised</div></div></div>
@@ -1139,15 +1907,18 @@ footer{background:var(--text);padding:68px 0 34px;}
       <div class="sub-hdg"><div class="sub-hdg-line"></div><span class="sub-hdg-txt">Rehabilitation Services</span><div class="sub-hdg-line"></div></div>
       <div class="svc-c-wrap" id="rWrap">
         <div class="svc-mask" id="rMask"><div class="svc-track auto" id="rTrack">
-          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,var(--green-xlight),var(--beige-deep));position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🦴</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Ortho</span><div class="physio-card-base-title">Ortho Rehab</div><div class="physio-card-base-sub">Joints · Bones · Structure</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Orthopaedic Rehabilitation</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Post-surgical recovery, joint replacement rehab, and chronic orthopaedic pain management with evidence-based protocols tailored for you.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
-          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#e0daf0,#cfc4e8);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🧠</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Neuro</span><div class="physio-card-base-title">Neuro Rehab</div><div class="physio-card-base-sub">Brain · Spine · Movement</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Neurological Rehabilitation</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Rehabilitation for stroke, Parkinson's, MS, and spinal cord conditions. Restoring function and independence through targeted neurological therapy.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
-          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#f0dada,#e8c4c4);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">❤️</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Cardio</span><div class="physio-card-base-title">Cardio Rehab</div><div class="physio-card-base-sub">Heart · Lungs · Endurance</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Cardiopulmonary Rehabilitation</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Structured exercise and breathing programmes for post-cardiac conditions, improving endurance, lung capacity and quality of life.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
-          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#daeaf0,#c4d8e8);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🧒</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Paediatric</span><div class="physio-card-base-title">Paediatric Care</div><div class="physio-card-base-sub">Growth · Development · Play</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Paediatric Physiotherapy</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Child-friendly therapy for developmental delays and paediatric conditions, delivered in a warm, playful environment that children feel safe in.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
-          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#eaf0da,#d4e4c4);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🏃</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Sports</span><div class="physio-card-base-title">Sports Injury</div><div class="physio-card-base-sub">Recover · Rebuild · Perform</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Sports Injury Management</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Comprehensive sports injury management with personalised return-to-sport protocols for athletes of all levels.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
-          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#f0e4da,#e4d0c4);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🌸</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Women</span><div class="physio-card-base-title">Women Care</div><div class="physio-card-base-sub">Pelvic · Maternal · Hormonal</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Women's Health Physiotherapy</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Pelvic floor rehabilitation, prenatal and postnatal physiotherapy care with a compassionate, evidence-based approach.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
-          <!-- dupes -->
-          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,var(--green-xlight),var(--beige-deep));position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🦴</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Ortho</span><div class="physio-card-base-title">Ortho Rehab</div><div class="physio-card-base-sub">Joints · Bones · Structure</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Orthopaedic Rehabilitation</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Post-surgical recovery and orthopaedic pain management.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
-          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#eaf0da,#d4e4c4);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🏃</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Sports</span><div class="physio-card-base-title">Sports Injury</div><div class="physio-card-base-sub">Recover · Rebuild · Perform</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Sports Injury Management</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Return-to-sport protocols for all levels of athletes.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div></div></div>
+          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,var(--green-xlight),var(--beige-deep));position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🦴</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Pain Relief</span><div class="physio-card-base-title">Pain Relief &amp; Recovery</div><div class="physio-card-base-sub">Comfort · Heal · Restore</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Pain Relief &amp; Recovery</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Targeted therapy to relieve acute and chronic pain through evidence-based manual techniques, electrotherapy, and personalised recovery plans.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
+          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#eaf0da,#d4e4c4);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🏃</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Injury</span><div class="physio-card-base-title">Injury Rehab &amp; Return</div><div class="physio-card-base-sub">Recover · Rebuild · Perform</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Injury Rehab &amp; Return to Activity</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Comprehensive injury rehabilitation with structured return-to-sport or activity protocols for athletes and active individuals of all levels.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
+          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#daeaf0,#c4d8e8);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🌀</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Movement</span><div class="physio-card-base-title">Movement &amp; Restoration</div><div class="physio-card-base-sub">Mobility · Strength · Balance</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Movement &amp; Restoration Programs</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Holistic movement therapy to restore functional mobility, rebuild strength, and improve body mechanics for everyday living.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
+          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#e0daf0,#cfc4e8);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🧠</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Neuro</span><div class="physio-card-base-title">Neuro Rehab &amp; Balance</div><div class="physio-card-base-sub">Brain · Spine · Stability</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Neuro Rehab &amp; Balance Care</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Rehabilitation for stroke, Parkinson's, MS, vertigo and spinal cord conditions — restoring function, balance and independence.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
+          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#f0dada,#e8c4c4);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">❤️</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Cardio</span><div class="physio-card-base-title">Heart &amp; Lung Care</div><div class="physio-card-base-sub">Endurance · Breath · Vitality</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Heart &amp; Lung Care</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Structured exercise and breathing programmes for post-cardiac and pulmonary conditions, improving endurance, lung capacity and quality of life.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
+          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#f0e4da,#e4d0c4);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🌸</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Women</span><div class="physio-card-base-title">Women's Wellness Care</div><div class="physio-card-base-sub">Pelvic · Maternal · Hormonal</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Women's Wellness Care</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Pelvic floor rehabilitation, prenatal and postnatal physiotherapy — delivered with a compassionate, evidence-based approach tailored for women.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
+          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#daeae8,#c4d8d4);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🧓</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Senior</span><div class="physio-card-base-title">Active Aging &amp; Senior Care</div><div class="physio-card-base-sub">Strength · Stability · Freedom</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Active Aging &amp; Senior Care</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Specialised therapy for older adults to maintain independence, prevent falls, and stay active — with gentle, effective programmes.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
+          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#daeaf0,#c4d8e8);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🧒</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Kids</span><div class="physio-card-base-title">Kids Movement &amp; Development</div><div class="physio-card-base-sub">Growth · Play · Development</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Kids Movement &amp; Development</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Child-friendly therapy for developmental delays and paediatric conditions, in a warm, playful environment where children feel safe and engaged.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
+          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#eaf0da,#d4e4c4);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🧍</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Posture</span><div class="physio-card-base-title">Posture &amp; Lifestyle</div><div class="physio-card-base-sub">Align · Correct · Thrive</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Posture &amp; Lifestyle Correction</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Addressing postural imbalances, desk-related pain, and lifestyle habits through targeted correction programs and movement education.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
+          <!-- dupes for seamless scroll -->
+          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,var(--green-xlight),var(--beige-deep));position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🦴</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Pain Relief</span><div class="physio-card-base-title">Pain Relief &amp; Recovery</div><div class="physio-card-base-sub">Comfort · Heal · Restore</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Pain Relief &amp; Recovery</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Targeted therapy to relieve acute and chronic pain through evidence-based protocols.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div>
+          <div class="physio-card"><div class="physio-card-bg"><div style="background:linear-gradient(135deg,#eaf0da,#d4e4c4);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:100px;opacity:.3">🏃</span></div></div><div class="physio-card-overlay"></div><div class="physio-card-base"><span class="physio-card-base-badge">Injury</span><div class="physio-card-base-title">Injury Rehab &amp; Return</div><div class="physio-card-base-sub">Recover · Rebuild · Perform</div></div><div class="physio-card-detail"><div class="physio-detail-inner"><span class="physio-detail-tag">Rehabilitation</span><div class="physio-detail-name">Injury Rehab &amp; Return to Activity</div><div class="physio-detail-line"></div><p class="physio-detail-desc">Structured return-to-sport protocols for all levels.</p><a href="#contact" class="physio-detail-cta">Enquire →</a></div></div></div></div></div>
       </div>
       <div class="svc-arrows"><button class="svc-arr" onclick="svcScroll('rMask',-1)">←</button><button class="svc-arr" onclick="svcScroll('rMask',1)">→</button></div>
     </div>
@@ -1263,7 +2034,7 @@ footer{background:var(--text);padding:68px 0 34px;}
           <div class="event-card-title">Summer Camp</div>
           <div class="event-card-sub">Children · Youth · Adventure</div>
           <p class="event-card-desc">Wellness adventure featuring yoga, fitness games, healthy cooking, meditation, and outdoor activities for young minds.</p>
-          <div class="event-card-tags"><span class="event-card-tag">Yoga</span><span class="event-card-tag">Cooking</span><span class="event-card-tag">Mindfulness</span><span class="event-card-tag">Outdoor</span></div>
+          <div class="event-card-tags"><span class="event-card-tag">Yoga</span><span class="event-card-tag">Fitness</span><span class="event-card-tag">Mindfulness</span></div>
           <a href="#contact" class="event-card-cta">Enquire Now →</a>
         </div>
       </div>
@@ -1273,7 +2044,7 @@ footer{background:var(--text);padding:68px 0 34px;}
         <span class="event-card-badge">Celebrate</span>
         <div class="event-card-emoji">🎉</div>
         <div class="event-card-content">
-          <div class="event-card-title">Celebrations</div>
+          <div class="event-card-title">Wellness Celebrations</div>
           <div class="event-card-sub">Birthdays · Anniversaries · Milestones</div>
           <p class="event-card-desc">Special occasions reimagined as beautiful, healthy celebrations combining yoga and nourishing, gourmet food.</p>
           <div class="event-card-tags"><span class="event-card-tag">Custom Theme</span><span class="event-card-tag">Group Yoga</span><span class="event-card-tag">Healthy Food</span></div>
@@ -1289,7 +2060,46 @@ footer{background:var(--text);padding:68px 0 34px;}
           <div class="event-card-title">Healthy Kitty Parties</div>
           <div class="event-card-sub">Women Only · Luxury Wellness</div>
           <p class="event-card-desc">Exclusive wellness gatherings for women featuring yoga, treatments, gourmet healthy food, and wellness talks.</p>
-          <div class="event-card-tags"><span class="event-card-tag">Women Only</span><span class="event-card-tag">Gourmet Food</span><span class="event-card-tag">Treatments</span></div>
+          <div class="event-card-tags"><span class="event-card-tag">Women Only</span><span class="event-card-tag">Gourmet</span><span class="event-card-tag">Treatments</span></div>
+          <a href="#contact" class="event-card-cta">Enquire Now →</a>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-card-bg" style="background:linear-gradient(135deg,#1a2a4a,#a8c8d8);"></div>
+        <div class="event-card-overlay"></div>
+        <span class="event-card-badge">Corporate</span>
+        <div class="event-card-emoji">🏢</div>
+        <div class="event-card-content">
+          <div class="event-card-title">Corporate Wellness Sessions</div>
+          <div class="event-card-sub">Teams · Productivity · Wellbeing</div>
+          <p class="event-card-desc">Tailored wellness programs for corporate teams — yoga, mindfulness, and physiotherapy sessions to boost productivity and morale.</p>
+          <div class="event-card-tags"><span class="event-card-tag">Team Yoga</span><span class="event-card-tag">Mindfulness</span><span class="event-card-tag">On-site</span></div>
+          <a href="#contact" class="event-card-cta">Enquire Now →</a>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-card-bg" style="background:linear-gradient(135deg,#4a1a2a,#d8a8b8);"></div>
+        <div class="event-card-overlay"></div>
+        <span class="event-card-badge">Couples</span>
+        <div class="event-card-emoji">💑</div>
+        <div class="event-card-content">
+          <div class="event-card-title">Couple &amp; Partner Yoga</div>
+          <div class="event-card-sub">Connection · Trust · Harmony</div>
+          <p class="event-card-desc">Deepen your bond through partner yoga experiences designed to build trust, communication, and shared wellness routines.</p>
+          <div class="event-card-tags"><span class="event-card-tag">Partner Yoga</span><span class="event-card-tag">Connection</span><span class="event-card-tag">Mindful</span></div>
+          <a href="#contact" class="event-card-cta">Enquire Now →</a>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-card-bg" style="background:linear-gradient(135deg,#1a4a2a,#a8d8b8);"></div>
+        <div class="event-card-overlay"></div>
+        <span class="event-card-badge">Kids</span>
+        <div class="event-card-emoji">🌟</div>
+        <div class="event-card-content">
+          <div class="event-card-title">Kids Activity &amp; Yoga Workshops</div>
+          <div class="event-card-sub">Fun · Movement · Discovery</div>
+          <p class="event-card-desc">Interactive workshops blending movement, play, and mindfulness — helping children build focus, strength, and healthy habits.</p>
+          <div class="event-card-tags"><span class="event-card-tag">Kids Yoga</span><span class="event-card-tag">Activities</span><span class="event-card-tag">Play</span></div>
           <a href="#contact" class="event-card-cta">Enquire Now →</a>
         </div>
       </div>
@@ -1297,6 +2107,231 @@ footer{background:var(--text);padding:68px 0 34px;}
   </div>
 </section>
 
+<!-- ════ TECHNOLOGY & EQUIPMENT ════ -->
+<section id="technology">
+  <div class="container">
+    <div class="sec-header reveal">
+      <div class="sec-badge">Technology</div>
+      <h2 class="sec-title">Our <em>Equipment</em> &amp; Technology</h2>
+      <p class="sec-desc">State-of-the-art physiotherapy technology and professional yoga props — supporting your healing, practice, and performance at every level.</p>
+    </div>
+
+    <!-- Stats Band -->
+    <div class="tech-intro-band reveal">
+      <div class="tib-item">
+        <span class="tib-num">15+</span>
+        <span class="tib-lbl">Advanced Machines</span>
+      </div>
+      <div class="tib-item">
+        <span class="tib-num">100%</span>
+        <span class="tib-lbl">Certified Equipment</span>
+      </div>
+      <div class="tib-item">
+        <span class="tib-num">7+</span>
+        <span class="tib-lbl">Therapy Modalities</span>
+      </div>
+    </div>
+
+    <!-- Tab Switcher -->
+    <div class="tech-tabs" id="techTabs">
+      <button class="tech-tab-btn active" data-panel="physio-tech">⚡ Physiotherapy Technology</button>
+      <button class="tech-tab-btn" data-panel="yoga-props">🧘 Yoga Props &amp; Equipment</button>
+    </div>
+
+    <!-- Panel: Physiotherapy Technology -->
+    <div class="tech-panel active" id="physio-tech">
+      <div class="tech-grid">
+        <div class="tech-card reveal">
+          <div class="tech-icon-wrap" style="background:linear-gradient(135deg,#daeaf0,#b8d4e4)">
+            <div class="tech-icon-inner">⚡</div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-tag">Electrotherapy</div>
+            <h3 class="tech-title">TENS / IFT Machine</h3>
+            <p class="tech-desc">Electrical nerve stimulation and interferential therapy for effective pain relief, muscle stimulation, and accelerated recovery.</p>
+            <ul class="tech-list">
+              <li>Acute &amp; chronic pain relief</li>
+              <li>Muscle re-education</li>
+              <li>Oedema reduction</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon-wrap" style="background:linear-gradient(135deg,#f0e4da,#e4d0c4)">
+            <div class="tech-icon-inner">🔊</div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-tag">Ultrasound</div>
+            <h3 class="tech-title">Therapeutic Ultrasound</h3>
+            <p class="tech-desc">High-frequency sound waves penetrate deep into soft tissue to accelerate healing and break down scar tissue.</p>
+            <ul class="tech-list">
+              <li>Soft tissue healing</li>
+              <li>Inflammation reduction</li>
+              <li>Scar tissue management</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon-wrap" style="background:linear-gradient(135deg,#e0daf0,#cfc4e8)">
+            <div class="tech-icon-inner">🔴</div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-tag">Photobiomodulation</div>
+            <h3 class="tech-title">LASER Therapy</h3>
+            <p class="tech-desc">Low-level laser therapy for cellular regeneration, wound healing, and non-invasive pain management of chronic conditions.</p>
+            <ul class="tech-list">
+              <li>Cellular repair &amp; regeneration</li>
+              <li>Chronic pain management</li>
+              <li>Wound healing acceleration</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon-wrap" style="background:linear-gradient(135deg,#eaf0da,#d4e4c4)">
+            <div class="tech-icon-inner">💥</div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-tag">Shockwave</div>
+            <h3 class="tech-title">Shockwave Therapy</h3>
+            <p class="tech-desc">Extracorporeal Shockwave Therapy for tendon pathologies, plantar fasciitis, calcific tendinitis and musculoskeletal conditions.</p>
+            <ul class="tech-list">
+              <li>Tendon &amp; fascia treatment</li>
+              <li>Calcium deposit breakdown</li>
+              <li>Accelerated tissue repair</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon-wrap" style="background:linear-gradient(135deg,#daeae8,#c4d8d4)">
+            <div class="tech-icon-inner">🦴</div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-tag">Spinal Decompression</div>
+            <h3 class="tech-title">Cervical &amp; Lumbar Traction</h3>
+            <p class="tech-desc">Mechanical traction for spinal decompression — relieving disc pressure, nerve compression, and radicular pain effectively.</p>
+            <ul class="tech-list">
+              <li>Disc herniation relief</li>
+              <li>Nerve decompression</li>
+              <li>Spinal realignment</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tech-card reveal">
+          <div class="tech-icon-wrap" style="background:linear-gradient(135deg,#f0dada,#e8c4c4)">
+            <div class="tech-icon-inner">🕯️</div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-tag">Thermotherapy</div>
+            <h3 class="tech-title">Paraffin Wax Bath</h3>
+            <p class="tech-desc">Therapeutic wax immersion for arthritis, joint stiffness, and hand/foot rehabilitation — soothing deep heat for lasting relief.</p>
+            <ul class="tech-list">
+              <li>Arthritis &amp; joint pain relief</li>
+              <li>Improved circulation</li>
+              <li>Muscle relaxation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Yoga Props -->
+    <div class="tech-panel" id="yoga-props">
+      <div class="yoga-props-grid">
+        <div class="tech-card horiz reveal">
+          <div class="tech-icon-wrap" style="background:linear-gradient(135deg,#d8e8d0,#c0d8b8)">
+            <div class="tech-icon-inner">🪁</div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-tag">Signature</div>
+            <h3 class="tech-title">Aerial Yoga Rigs</h3>
+            <p class="tech-desc">Custom-installed, load-tested aerial hammocks and suspension systems for safe, therapeutic aerial practice at all levels.</p>
+            <ul class="tech-list">
+              <li>Professional-grade hammocks</li>
+              <li>Load-tested &amp; certified</li>
+              <li>Multiple height settings</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tech-card horiz reveal">
+          <div class="tech-icon-wrap" style="background:linear-gradient(135deg,#e8eddf,#d8e4cc)">
+            <div class="tech-icon-inner">🧱</div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-tag">Therapeutic Props</div>
+            <h3 class="tech-title">Blocks, Bolsters &amp; Straps</h3>
+            <p class="tech-desc">Premium cork blocks, bolsters, blankets, and straps for proper alignment, therapeutic modifications, and restorative practice.</p>
+            <ul class="tech-list">
+              <li>Cork &amp; foam blocks</li>
+              <li>Meditation bolsters</li>
+              <li>Alignment straps</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tech-card horiz reveal">
+          <div class="tech-icon-wrap" style="background:linear-gradient(135deg,#daeaf0,#c4d8e8)">
+            <div class="tech-icon-inner">🔵</div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-tag">Balance Training</div>
+            <h3 class="tech-title">Balance &amp; Stability Equipment</h3>
+            <p class="tech-desc">Balance boards, BOSU trainers, and wobble cushions for core strengthening, neurological training, and proprioception.</p>
+            <ul class="tech-list">
+              <li>BOSU balance trainers</li>
+              <li>Swiss &amp; therapy balls</li>
+              <li>Balance boards</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tech-card horiz reveal">
+          <div class="tech-icon-wrap" style="background:linear-gradient(135deg,#f0e8da,#e4d4c4)">
+            <div class="tech-icon-inner">💪</div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-tag">Resistance</div>
+            <h3 class="tech-title">Resistance &amp; Rehab Bands</h3>
+            <p class="tech-desc">Professional Thera-bands and resistance loops for muscle strengthening, joint rehabilitation, and functional movement training.</p>
+            <ul class="tech-list">
+              <li>Graded resistance levels</li>
+              <li>Joint rehab protocols</li>
+              <li>Functional training</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tech-card horiz reveal">
+          <div class="tech-icon-wrap" style="background:linear-gradient(135deg,#ffe8e8,#f8d0d0)">
+            <div class="tech-icon-inner">🧘</div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-tag">Mats &amp; Surfaces</div>
+            <h3 class="tech-title">Premium Yoga Mats</h3>
+            <p class="tech-desc">High-density, non-slip professional yoga mats providing superior grip, cushioning and joint protection for every style of practice.</p>
+            <ul class="tech-list">
+              <li>Non-slip natural rubber</li>
+              <li>Alignment markers</li>
+              <li>Hygiene-certified materials</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tech-card horiz reveal">
+          <div class="tech-icon-wrap" style="background:linear-gradient(135deg,#e8daf0,#d4c4e8)">
+            <div class="tech-icon-inner">🎵</div>
+          </div>
+          <div class="tech-body">
+            <div class="tech-tag">Sound &amp; Ambience</div>
+            <h3 class="tech-title">Singing Bowls &amp; Sound Tools</h3>
+            <p class="tech-desc">Himalayan singing bowls and sound healing instruments used in workshops and therapeutic yoga sessions for deep relaxation.</p>
+            <ul class="tech-list">
+              <li>Hand-crafted Himalayan bowls</li>
+              <li>Tuning forks for sound therapy</li>
+              <li>Ambient sound systems</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
 <div class="svc-divider"></div>
 
 <!-- CONTACT -->
@@ -1314,10 +2349,10 @@ footer{background:var(--text);padding:68px 0 34px;}
           <p>Whether you're just starting out or deepening an existing practice, our expert team is here to support every step of your journey.</p>
         </div>
         <div class="ct-items">
-          <div class="ct-item"><div class="ct-icon">📍</div><div class="ct-txt"><h4>Visit Us</h4><p>Kaya Haus Studio, Ahmedabad, Gujarat</p></div></div>
-          <div class="ct-item"><div class="ct-icon">📞</div><div class="ct-txt"><h4>Call Us</h4><p>+91 00000 00000</p></div></div>
-          <div class="ct-item"><div class="ct-icon">✉️</div><div class="ct-txt"><h4>Email Us</h4><p>hello@kayahaus.com</p></div></div>
-          <div class="ct-item"><div class="ct-icon">🕐</div><div class="ct-txt"><h4>Studio Hours</h4><p>Mon–Fri: 6 AM – 8 PM · Sat: 7 AM – 6 PM<br/>Sun: 8 AM – 12 PM</p></div></div>
+          <div class="ct-item"><div class="ct-icon">📍</div><div class="ct-txt"><h4>Visit Us</h4><p>205 Sun Orbit, Rajpath Rangoli Rd, Behind PRL Colony,<br/>SG Highway, Ahmedabad, Gujarat 380059</p></div></div>
+          <div class="ct-item"><div class="ct-icon">📞</div><div class="ct-txt"><h4>Call Us</h4><p>+91 99133 66662</p></div></div>
+          <div class="ct-item"><div class="ct-icon">✉️</div><div class="ct-txt"><h4>Email Us</h4><p>kayahaus.core@gmail.com</p></div></div>
+          <div class="ct-item"><div class="ct-icon">🕐</div><div class="ct-txt"><h4>Studio Hours</h4><p>Mon–Sat: 7 AM – 8 PM<br/>Sunday &amp; Public Holidays: Closed</p></div></div>
         </div>
       </div>
       <div class="reveal-r">
@@ -1334,10 +2369,10 @@ footer{background:var(--text);padding:68px 0 34px;}
             <label>Service Interested In</label>
             <select>
               <option value="" disabled selected>Select a service…</option>
-              <optgroup label="Yoga"><option>Therapeutic Personal Yoga</option><option>Kids Yoga</option><option>Prenatal / Postnatal Yoga</option><option>Vinyasa / Power Yoga</option><option>Aerial Yoga</option></optgroup>
-              <optgroup label="Physiotherapy"><option>Rehabilitation</option><option>Performance Enhancement</option></optgroup>
+              <optgroup label="Yoga"><option>Adult Yoga</option><option>Therapeutic Personal Yoga</option><option>Kids Yoga</option><option>Prenatal / Postnatal Yoga</option><option>Vinyasa / Power Yoga</option><option>Aerial Yoga</option></optgroup>
+              <optgroup label="Physiotherapy"><option>Pain Relief &amp; Recovery</option><option>Injury Rehab &amp; Return to Activity</option><option>Neuro Rehab &amp; Balance Care</option><option>Heart &amp; Lung Care</option><option>Women's Wellness Care</option><option>Kids Movement &amp; Development</option><option>Active Aging &amp; Senior Care</option><option>Posture &amp; Lifestyle Correction</option><option>Cupping Therapy</option><option>Dry Needling</option><option>IASTM</option><option>Sports Massage</option><option>Kinesio Taping</option></optgroup>
               <optgroup label="Workshops"><option>Yoga Nidra</option><option>Mindfulness Meditation</option><option>Pranayama</option><option>Sound Healing</option><option>Yin / Restorative / Face Yoga</option></optgroup>
-              <optgroup label="Other"><option>Diet &amp; Nutrition</option><option>Special Events</option></optgroup>
+              <optgroup label="Events"><option>Summer Camp</option><option>Wellness Celebrations</option><option>Healthy Kitty Parties</option><option>Corporate Wellness Sessions</option><option>Couple &amp; Partner Yoga</option><option>Kids Activity &amp; Yoga Workshops</option></optgroup>
             </select>
           </div>
           <div class="fg"><label>Message (Optional)</label><textarea placeholder="Tell us about your wellness goals…"></textarea></div>
@@ -1351,19 +2386,21 @@ footer{background:var(--text);padding:68px 0 34px;}
 <!-- FOOTER CTA BAND -->
 <div class="ftr-band">
   <h2>Begin Your Healing Journey</h2>
-  <p>Premium yoga, physiotherapy &amp; wellness — in the heart of Ahmedabad.</p>
+  <p>Premium yoga &amp; physiotherapy — in the heart of Ahmedabad.</p>
   <a href="#contact" class="ftr-band-btn">Book a Free Consultation →</a>
 </div>
+
 
 <!-- FOOTER -->
 <footer>
   <div class="container">
     <div class="ftr-grid">
-      <div>
+      <!-- Brand col — glass card -->
+      <div class="ftr-brand-card">
         <span class="ftr-logo">KAYA HAUS</span>
         <span class="ftr-tag">Art of Balance</span>
         <p class="ftr-about">A sanctuary for holistic wellbeing — where ancient wisdom meets modern science to transform mind, body, and soul.</p>
-        <div class="ftr-hours"><span class="ftr-hours-lbl">Studio Hours</span><p>Mon–Fri: 6 AM – 8 PM<br/>Sat: 7 AM – 6 PM · Sun: 8 AM – 12 PM</p></div>
+        <div class="ftr-hours"><span class="ftr-hours-lbl">Studio Hours</span><p>Mon–Sat: 7 AM – 8 PM<br/>Sunday &amp; Public Holidays: Closed</p></div>
         <div class="ftr-soc">
           <a href="#" class="soc">IG</a>
           <a href="#" class="soc">FB</a>
@@ -1371,12 +2408,13 @@ footer{background:var(--text);padding:68px 0 34px;}
           <a href="#" class="soc">WA</a>
         </div>
       </div>
-      <div class="ftr-col"><h4>Yoga</h4><ul><li><a href="#yoga">Therapeutic Personal</a></li><li><a href="#yoga">Kids Yoga</a></li><li><a href="#yoga">Prenatal / Postnatal</a></li><li><a href="#yoga">Vinyasa / Power</a></li><li><a href="#yoga">Aerial Yoga</a></li></ul></div>
-      <div class="ftr-col"><h4>Physiotherapy</h4><ul><li><a href="#physio">Ortho Rehab</a></li><li><a href="#physio">Neuro Rehab</a></li><li><a href="#physio">Sports Injury</a></li><li><a href="#physio">Dry Needling</a></li><li><a href="#physio">Sports Massage</a></li><li><a href="#physio">Cupping</a></li></ul></div>
-      <div class="ftr-col"><h4>Quick Links</h4><ul><li><a href="#workshops">Workshops</a></li><li><a href="#diet">Nutrition</a></li><li><a href="#events">Special Events</a></li><li><a href="#studio">About Us</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#contact">Book a Session</a></li></ul></div>
+      <!-- Link cols — glass cards -->
+      <div class="ftr-col ftr-glass-col"><h4>Yoga</h4><ul><li><a href="#yoga">Adult Yoga</a></li><li><a href="#yoga">Therapeutic Personal</a></li><li><a href="#yoga">Kids Yoga</a></li><li><a href="#yoga">Prenatal / Postnatal</a></li><li><a href="#yoga">Vinyasa / Power</a></li><li><a href="#yoga">Aerial Yoga</a></li></ul></div>
+      <div class="ftr-col ftr-glass-col"><h4>Physiotherapy</h4><ul><li><a href="#physio">Pain Relief &amp; Recovery</a></li><li><a href="#physio">Neuro Rehab &amp; Balance</a></li><li><a href="#physio">Women's Wellness Care</a></li><li><a href="#physio">Dry Needling</a></li><li><a href="#physio">Sports Massage</a></li><li><a href="#physio">Cupping Therapy</a></li></ul></div>
+      <div class="ftr-col ftr-glass-col"><h4>Quick Links</h4><ul><li><a href="#workshops">Workshops</a></li><li><a href="#events">Special Events</a></li><li><a href="#technology">Technology &amp; Equipment</a></li><li><a href="#studio">About Us</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#contact">Book a Session</a></li></ul></div>
     </div>
     <div class="ftr-bot">
-      <p class="ftr-copy">© 2025 Kaya Haus. All rights reserved. Crafted with care in Ahmedabad.</p>
+      <p class="ftr-copy">© 2019–2026 Kaya Haus. All rights reserved. Crafted with care in Ahmedabad.</p>
       <div class="ftr-links"><a href="#">Privacy Policy</a><a href="#">Terms</a><a href="#">Sitemap</a></div>
     </div>
   </div>
@@ -1407,7 +2445,12 @@ function exitLoader(){
   if(loaderDone)return;
   loaderDone=true;
   loader.classList.add('exit');
-  setTimeout(()=>{loader.classList.add('done');document.body.classList.remove('loading');},1100);
+  setTimeout(()=>{
+    loader.classList.add('done');
+    document.body.classList.remove('loading');
+    /* Always start at the very top of the page after loader */
+    window.scrollTo(0,0);
+  },1100);
   setTimeout(()=>{if(loader.parentNode)loader.remove();},1600);
 }
 (function tick(now){
@@ -1635,6 +2678,24 @@ document.querySelectorAll('.svc-mask').forEach(el=>{
   });
 });
 
+/* ── TECH TABS ── */
+document.querySelectorAll('.tech-tab-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tech-tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tech-panel').forEach(p=>p.classList.remove('active'));
+    this.classList.add('active');
+    const panel=document.getElementById(this.dataset.panel);
+    if(panel){
+      panel.classList.add('active');
+      // Re-trigger reveal animations for newly shown cards
+      panel.querySelectorAll('.reveal').forEach(el=>{
+        el.classList.remove('vis');
+        setTimeout(()=>el.classList.add('vis'),50);
+      });
+    }
+  });
+});
+
 /* ── FORM SUBMIT ── */
 const formBtn = document.getElementById('formBtn');
 if(formBtn) {
@@ -1654,6 +2715,35 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth'});}
   });
 });
+
+/* ── STUDIO STRIP SCROLL DOTS ── */
+(function(){
+  const strip = document.getElementById('stStrip');
+  const dots = document.querySelectorAll('#stDots span');
+  if(!strip||!dots.length)return;
+  strip.addEventListener('scroll',()=>{
+    const maxScroll = strip.scrollWidth - strip.clientWidth;
+    if(!maxScroll)return;
+    const progress = strip.scrollLeft / maxScroll;
+    const idx = Math.round(progress * (dots.length - 1));
+    dots.forEach((d,i)=>{
+      d.classList.toggle('act', i===idx);
+    });
+  },{passive:true});
+})();
+
+/* ── GALLERY FILTER MOBILE SCROLL ── */
+(function(){
+  const fil = document.querySelector('.gal-filters');
+  if(!fil)return;
+  const activeBtn = fil.querySelector('.gf.active');
+  if(activeBtn) activeBtn.scrollIntoView({block:'nearest',inline:'center'});
+  fil.querySelectorAll('.gf').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      setTimeout(()=>btn.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}),100);
+    });
+  });
+})();
 </script>
 </body>
 
